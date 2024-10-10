@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donny</title>
+    <link rel="icon" href="images/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <a class="navbar-brand" href="#">My Portfolio</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="text-center py-5" style="background-color: black; color: white;">
+        <img src="images/profile.jpg" alt="Profile Picture" class="rounded-circle" width="150">
+        <h1 class="display-4">Hello, I'm Don Dave Igot</h1>
+        <p class="lead">An IT student, I code with AI.</p>
+    </header>
+
+    <section id="about" class="container my-5">
+        <h2 class="text-center">About Me</h2>
+        <p>I live in Casia, Bankal, Lapu-Lapu City, Philippines. I'm an IT student with a strong interest in programming. In my free time, I enjoy watching anime and reading manhwa.</p>
+    </section>
+
+    <section id="skills" class="container my-5">
+        <h2 class="text-center">Skills</h2>
+        <div class="row text-center">
+            <div class="col-md-3 fade-in">
+                <i class="fab fa-html5 fa-5x"></i>
+                <h5 class="mt-3">HTML</h5>
+            </div>
+            <div class="col-md-3 fade-in">
+                <i class="fab fa-css3-alt fa-5x"></i>
+                <h5 class="mt-3">CSS</h5>
+            </div>
+            <div class="col-md-3 fade-in">
+                <i class="fab fa-js fa-5x"></i>
+                <h5 class="mt-3">JavaScript</h5>
+            </div>
+            <div class="col-md-3 fade-in">
+                <i class="fab fa-php fa-5x"></i>
+                <h5 class="mt-3">PHP</h5>
+            </div>
+            <div class="col-md-3 fade-in">
+                <i class="fas fa-database fa-5x"></i>
+                <h5 class="mt-3">MySQL</h5>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="container my-5">
+        <h2 class="text-center">Projects</h2>
+        <div class="row">
+            <div class="col-md-4 text-center fade-in">
+                <div class="card p-4">
+                    <i class="fas fa-gamepad fa-5x"></i>
+                    <h5 class="mt-3">Snake Game</h5>
+                    <p>A simple implementation of the classic Snake game, where players control a snake to eat food and grow longer.</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center fade-in">
+                <div class="card p-4">
+                    <i class="fas fa-user fa-5x"></i>
+                    <h5 class="mt-3">Login & Register Design</h5>
+                    <p>Elegant and user-friendly login and registration forms, designed to enhance user experience.</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center fade-in">
+                <div class="card p-4">
+                    <i class="fas fa-calculator fa-5x"></i>
+                    <h5 class="mt-3">Simple Calculator</h5>
+                    <p>A basic calculator that performs arithmetic operations like addition, subtraction, multiplication, and division.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rating" class="container my-5">
+        <h2 class="text-center">Rate My Website</h2>
+        <div class="text-center" id="starRating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+        </div>
+        <p class="text-center" id="ratingMessage"></p>
+    </section>
+    
+    
+
+    <section id="contact" class="container my-5">
+        <h2 class="text-center">Contact Me</h2>
+        <p class="text-center">You can reach me through the following:</p>
+        <div class="text-center">
+            <a href="https://facebook.com" target="_blank" class="btn btn-dark m-2"><i class="fab fa-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank" class="btn btn-dark m-2"><i class="fab fa-instagram"></i></a>
+            <a href="https://youtube.com" target="_blank" class="btn btn-dark m-2"><i class="fab fa-youtube"></i></a>
+            <a href="mailto:your-email@gmail.com" class="btn btn-dark m-2"><i class="fas fa-envelope"></i></a>
+        </div>
+    </section>
+
+    <button id="scrollToTop" class="btn btn-dark" style="display: none; position: fixed; bottom: 20px; right: 20px;">↑</button>
+
+    <footer class="text-center py-4" style="background-color: black; color: white;">
+        <p>&copy; 2023 Don Dave Igot. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

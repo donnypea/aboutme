@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Light background */
+    color: #343a40; /* Dark text */
+    line-height: 1.6;
+}
+
+header {
+    background-color: #343a40; /* Dark background for header */
+    color: white;
+    padding: 80px 0;
+}
+
+header img {
+    border: 5px solid white; /* Add a border to the profile picture */
+}
+
+h1, h2 {
+    font-weight: 600; /* Bold headings */
+}
+
+section {
+    padding: 60px 0;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+    border-radius: 50px; /* Rounded buttons */
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn:hover {
+    background-color: #007bff; /* Change button color on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 20px 0;
+}
+
+#scrollToTop {
+    background-color: #007bff;
+    border: none;
+    border-radius: 50%;
+}
+
+
+.star {
+    font-size: 40px;
+    cursor: pointer;
+    color: gray; /* Default color */
+    transition: color 0.3s;
+}
+
+.star:hover,
+.star:hover ~ .star {
+    color: gold; /* Change color on hover */
+}
+
+.star.selected {
+    color: gold; /* Color when selected */
+}
