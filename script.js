@@ -32,7 +32,6 @@ $('#scrollToTop').on('click', function() {
     $('html, body').animate({ scrollTop: 0 }, 800);
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
     const stars = document.querySelectorAll('.star');
     const ratingMessage = document.getElementById('ratingMessage');
@@ -67,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function highlightStars(rating) {
         stars.forEach(star => {
             star.classList.remove('selected');
-            if (star.getAttribute('data-value') <= rating) {
+            if (parseInt(star.getAttribute('data-value')) <= parseInt(rating)) {
                 star.classList.add('selected');
             }
         });
