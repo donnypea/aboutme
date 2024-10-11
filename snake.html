@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Snake Game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #gameCanvas {
+            background-color: #000;
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #fff; /* Added border for better visibility */
+            border-radius: 10px; /* Rounded corners */
+            image-rendering: pixelated; /* Reduce pixelation */
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .arrow-btn {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+        }
+
+        .instructions {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .snake-body {
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5); /* Inner glow effect */
+        }
+
+        .snake-head {
+            background-color: green; /* Snake head color */
+            position: relative; /* For positioning eyes */
+        }
+
+        .eye {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: white;
+            border-radius: 50%; /* Round eyes */
+            top: 20%; /* Adjust eye position */
+            left: 30%; /* Adjust eye position */
+            transform: translate(-50%, -50%);
+        }
+
+        .pupil {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: black;
+            border-radius: 50%; /* Round pupil */
+            top: 20%; /* Adjust pupil position */
+            left: 30%; /* Adjust pupil position */
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container text-center">
+    <h1>3D Snake Game</h1>
+    <a href="index.html" class="btn btn-primary mb-3">Back to Home</a>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <div id="mobileControls" class="controls" style="display: none;">
+        <button class="btn btn-secondary arrow-btn" onclick="changeDirection('up')">↑</button><br>
+        <button class="btn btn-secondary arrow-btn" onclick="changeDirection('left')">←</button>
+        <button class="btn btn-secondary arrow-btn" onclick="changeDirection('down')">↓</button>
+        <button class="btn btn-secondary arrow-btn" onclick="changeDirection('right')">→</button>
+    </div>
+
+    <div id="pcControls" class="instructions" style="display: none;">
+        <p>Use arrow keys or WASD to control the snake!</p>
+    </div>
+</div>
+
+<!-- Game Over Modal -->
+<div class="modal fade" id="gameOverModal" tabindex="-1" role="dialog" aria-labelledby="gameOverLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="gameOverLabel">Game Over</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Your final score: <span id="finalScore"></span></p>
+                <p>Your highest score: <span id="highScore"></span></p>
+                Do you want to play again?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="restartGame()">Play Again</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Game variables
+    let canvas = document.getElementById("gameCanvas");
+    let ctx = canvas.getContext("2d");
+    let box = 20;
+    let snake = [{x: 9 * box, y: 10 * box}];
+    let direction;
+    let score = 0;
+    let highScore = localStorage.getItem('highScore') ? parseInt(localStorage.getItem('highScore')) : 0;
+
+    let food = {
+        x: Math.floor(Math.random() * 19 + 1) * box,
+        y: Math.floor(Math.random() * 19 + 1) * box
+    };
+    let game;
+
+    // Detect device type
+    function detectDevice() {
+        if (window.innerWidth <= 768) {
+            document.getElementById("mobileControls").style.display = "block";
+        } else {
+            document.getElementById("pcControls").style.display = "block";
+        }
+    }
+
+    // Mobile direction change
+    function changeDirection(newDirection) {
+        switch (newDirection) {
+            case 'up':
+                if (direction !== 'DOWN') direction = 'UP';
+                break;
+            case 'down':
+                if (direction !== 'UP') direction = 'DOWN';
+                break;
+            case 'left':
+                if (direction !== 'RIGHT') direction = 'LEFT';
+                break;
+            case 'right':
+                if (direction !== 'LEFT') direction = 'RIGHT';
+                break;
+        }
+    }
+
+    // PC direction change
+    document.addEventListener("keydown", directionChange);
+    function directionChange(event) {
+        let key = event.keyCode;
+        if ((key === 37 || key === 65) && direction !== 'RIGHT') direction = 'LEFT';  // Left arrow or 'A'
+        if ((key === 38 || key === 87) && direction !== 'DOWN') direction = 'UP';    // Up arrow or 'W'
+        if ((key === 39 || key === 68) && direction !== 'LEFT') direction = 'RIGHT'; // Right arrow or 'D'
+        if ((key === 40 || key === 83) && direction !== 'UP') direction = 'DOWN';    // Down arrow or 'S'
+    }
+
+    // Draw the game
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw snake
+        for (let i = 0; i < snake.length; i++) {
+            if (i === 0) {
+                drawSnakeHead(snake[i]); // Draw head with eyes
+            } else {
+                ctx.fillStyle = "white"; // Snake body color
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                ctx.strokeStyle = "black"; // Outline for body segments
+                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+            }
+        }
+
+        // Draw food
+        ctx.fillStyle = "red"; // Food color
+        ctx.fillRect(food.x, food.y, box, box);
+
+        // Move snake
+        let snakeX = snake[0].x;
+        let snakeY = snake[0].y;
+
+        if (direction === "LEFT") snakeX -= box;
+        if (direction === "UP") snakeY -= box;
+        if (direction === "RIGHT") snakeX += box;
+        if (direction === "DOWN") snakeY += box;
+
+        // If snake eats the food
+        if (snakeX === food.x && snakeY === food.y) {
+            score++;
+            food = {
+                x: Math.floor(Math.random() * 19 + 1) * box,
+                y: Math.floor(Math.random() * 19 + 1) * box
+            };
+        } else {
+            snake.pop();
+        }
+
+        // Add new head
+        let newHead = {
+            x: snakeX,
+            y: snakeY
+        };
+
+        // Game over conditions
+        if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
+            clearInterval(game);
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('highScore', highScore);  // Save high score to localStorage
+            }
+            showGameOverModal(); // Trigger Game Over modal
+        }
+
+        snake.unshift(newHead);
+    }
+
+    // Function to draw the snake's head with eyes
+    function drawSnakeHead(segment) {
+        ctx.fillStyle = "green"; // Head color
+        ctx.fillRect(segment.x, segment.y, box, box);
+        ctx.strokeStyle = "black"; // Outline for head
+        ctx.strokeRect(segment.x, segment.y, box, box);
+
+        // Draw eyes
+        ctx.fillStyle = "white"; // Eye color
+        ctx.fillRect(segment.x + 5, segment.y + 5, 5, 5); // Left eye
+        ctx.fillRect(segment.x + 10, segment.y + 5, 5, 5); // Right eye
+        ctx.fillStyle = "black"; // Pupil color
+        ctx.fillRect(segment.x + 7, segment.y + 7, 2, 2); // Left pupil
+        ctx.fillRect(segment.x + 12, segment.y + 7, 2, 2); // Right pupil
+    }
+
+    // Collision detection
+    function collision(head, array) {
+        for (let i = 0; i < array.length; i++) {
+            if (head.x === array[i].x && head.y === array[i].y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Show Game Over modal
+    function showGameOverModal() {
+        document.getElementById("finalScore").innerText = score;
+        document.getElementById("highScore").innerText = highScore;
+        $('#gameOverModal').modal('show');
+    }
+
+    // Restart the game
+    function restartGame() {
+        score = 0;
+        direction = null;
+        snake = [{x: 9 * box, y: 10 * box}];
+        food = {
+            x: Math.floor(Math.random() * 19 + 1) * box,
+            y: Math.floor(Math.random() * 19 + 1) * box
+        };
+        game = setInterval(draw, 100);
+        $('#gameOverModal').modal('hide');
+    }
+
+    detectDevice(); // Check device type
+    game = setInterval(draw, 100); // Start the game loop
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
