@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Snake Game</title>
-        <link rel="icon" href="images/favicon.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -12,15 +11,15 @@
             background-color: #000;
             display: block;
             margin: 0 auto;
-            border: 2px solid #fff; /* Added border for better visibility */
-            border-radius: 10px; /* Rounded corners */
-            image-rendering: pixelated; /* Reduce pixelation */
+            border-radius: 8px; /* Rounded corners for a better look */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow for a 3D effect */
         }
 
         .controls {
             display: flex;
             justify-content: center;
             margin-top: 20px;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
         }
 
         .arrow-btn {
@@ -34,46 +33,24 @@
             margin-top: 10px;
         }
 
-        .snake-body {
-            border-radius: 50%;
-            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5); /* Inner glow effect */
+        .container {
+            text-align: center; /* Center all content within the container */
         }
 
-        .snake-head {
-            background-color: green; /* Snake head color */
-            position: relative; /* For positioning eyes */
-        }
-
-        .eye {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background-color: white;
-            border-radius: 50%; /* Round eyes */
-            top: 20%; /* Adjust eye position */
-            left: 30%; /* Adjust eye position */
-            transform: translate(-50%, -50%);
-        }
-
-        .pupil {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background-color: black;
-            border-radius: 50%; /* Round pupil */
-            top: 20%; /* Adjust pupil position */
-            left: 30%; /* Adjust pupil position */
-            transform: translate(-50%, -50%);
+        h1 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Add shadow to the title */
         }
     </style>
 </head>
 <body>
 
-<div class="container text-center">
-    <h1>Snake Game</h1>
+<div class="container">
+    <h1>3D Snake Game</h1>
+    <!-- Back Button -->
     <a href="index.html" class="btn btn-primary mb-3">Back to Home</a>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
 
+    <!-- Mobile Controls -->
     <div id="mobileControls" class="controls" style="display: none;">
         <button class="btn btn-secondary arrow-btn" onclick="changeDirection('up')">↑</button><br>
         <button class="btn btn-secondary arrow-btn" onclick="changeDirection('left')">←</button>
@@ -81,6 +58,7 @@
         <button class="btn btn-secondary arrow-btn" onclick="changeDirection('right')">→</button>
     </div>
 
+    <!-- PC Instructions -->
     <div id="pcControls" class="instructions" style="display: none;">
         <p>Use arrow keys or WASD to control the snake!</p>
     </div>
@@ -88,7 +66,7 @@
 
 <!-- Game Over Modal -->
 <div class="modal fade" id="gameOverModal" tabindex="-1" role="dialog" aria-labelledby="gameOverLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-sm" role="document"> <!-- Added modal-sm for small size -->
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="gameOverLabel">Game Over</h5>
@@ -96,7 +74,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body text-center"> <!-- Centered text -->
+      <div class="modal-body text-center">
         <p>Your final score: <span id="finalScore"></span></p>
         <p>Your highest score: <span id="highScore"></span></p>
         Do you want to play again?
@@ -107,7 +85,6 @@
     </div>
   </div>
 </div>
-
 
 <script>
     // Game variables
@@ -128,9 +105,9 @@
     // Detect device type
     function detectDevice() {
         if (window.innerWidth <= 768) {
-            document.getElementById("mobileControls").style.display = "block";
+            document.getElementById("mobileControls").style.display = "flex"; // Show mobile controls
         } else {
-            document.getElementById("pcControls").style.display = "block";
+            document.getElementById("pcControls").style.display = "block"; // Show PC instructions
         }
     }
 
@@ -168,18 +145,12 @@
 
         // Draw snake
         for (let i = 0; i < snake.length; i++) {
-            if (i === 0) {
-                drawSnakeHead(snake[i]); // Draw head with eyes
-            } else {
-                ctx.fillStyle = "white"; // Snake body color
-                ctx.fillRect(snake[i].x, snake[i].y, box, box);
-                ctx.strokeStyle = "black"; // Outline for body segments
-                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
-            }
+            ctx.fillStyle = i === 0 ? "green" : "white";
+            ctx.fillRect(snake[i].x, snake[i].y, box, box);
         }
 
         // Draw food
-        ctx.fillStyle = "red"; // Food color
+        ctx.fillStyle = "red";
         ctx.fillRect(food.x, food.y, box, box);
 
         // Move snake
@@ -221,23 +192,6 @@
         snake.unshift(newHead);
     }
 
-    // Function to draw the snake's head with eyes
-    function drawSnakeHead(segment) {
-        ctx.fillStyle = "green"; // Head color
-        ctx.fillRect(segment.x, segment.y, box, box);
-        ctx.strokeStyle = "black"; // Outline for head
-        ctx.strokeRect(segment.x, segment.y, box, box);
-
-        // Draw eyes
-        ctx.fillStyle = "white"; // Eye color
-        ctx.fillRect(segment.x + 5, segment.y + 5, 5, 5); // Left eye
-        ctx.fillRect(segment.x + 10, segment.y + 5, 5, 5); // Right eye
-        ctx.fillStyle = "black"; // Pupil color
-        ctx.fillRect(segment.x + 7, segment.y + 7, 2, 2); // Left pupil
-        ctx.fillRect(segment.x + 12, segment.y + 7, 2, 2); // Right pupil
-    }
-
-    // Collision detection
     function collision(head, array) {
         for (let i = 0; i < array.length; i++) {
             if (head.x === array[i].x && head.y === array[i].y) {
@@ -247,6 +201,24 @@
         return false;
     }
 
+    // Start game
+    function startGame() {
+        direction = '';
+        snake = [{x: 9 * box, y: 10 * box}]; // Reset snake position
+        food = {
+            x: Math.floor(Math.random() * 19 + 1) * box,
+            y: Math.floor(Math.random() * 19 + 1) * box
+        }; // Reset food position
+        score = 0; // Reset score
+        game = setInterval(draw, 100);
+    }
+
+    // Restart game function
+    function restartGame() {
+        $('#gameOverModal').modal('hide');
+        startGame();
+    }
+
     // Show Game Over modal
     function showGameOverModal() {
         document.getElementById("finalScore").innerText = score;
@@ -254,24 +226,16 @@
         $('#gameOverModal').modal('show');
     }
 
-    // Restart the game
-    function restartGame() {
-        score = 0;
-        direction = null;
-        snake = [{x: 9 * box, y: 10 * box}];
-        food = {
-            x: Math.floor(Math.random() * 19 + 1) * box,
-            y: Math.floor(Math.random() * 19 + 1) * box
-        };
-        game = setInterval(draw, 100);
-        $('#gameOverModal').modal('hide');
-    }
-
-    detectDevice(); // Check device type
-    game = setInterval(draw, 100); // Start the game loop
+    // Detect device on load
+    window.onload = function() {
+        detectDevice();
+        startGame(); // Start the game when page loads
+    };
 </script>
+
+<!-- Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
