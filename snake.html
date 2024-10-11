@@ -17,17 +17,20 @@
         }
 
         .controls {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
-        }
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center items vertically */
+    margin-top: 20px;
+    flex-direction: column; /* Stack buttons vertically */
+}
 
-        .arrow-btn {
-            width: 60px;
-            height: 60px;
-            margin: 5px;
-        }
+.arrow-btn {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    font-size: 24px; /* Increase font size for better visibility */
+}
+
 
         .instructions {
             text-align: center;
@@ -52,18 +55,17 @@
     <canvas id="gameCanvas" width="400" height="400"></canvas>
 
     <!-- Mobile Controls -->
-    <div id="mobileControls" class="controls" style="display: none;">
-        <button class="btn btn-secondary arrow-btn" onclick="changeDirection('up')">↑</button><br>
-        <button class="btn btn-secondary arrow-btn" onclick="changeDirection('left')">←</button>
+<div id="mobileControls" class="controls" style="display: none;">
+    <div class="d-flex justify-content-center flex-column align-items-center">
+        <button class="btn btn-secondary arrow-btn" onclick="changeDirection('up')">↑</button>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-secondary arrow-btn" onclick="changeDirection('left')">←</button>
+            <button class="btn btn-secondary arrow-btn" onclick="changeDirection('right')">→</button>
+        </div>
         <button class="btn btn-secondary arrow-btn" onclick="changeDirection('down')">↓</button>
-        <button class="btn btn-secondary arrow-btn" onclick="changeDirection('right')">→</button>
-    </div>
-
-    <!-- PC Instructions -->
-    <div id="pcControls" class="instructions" style="display: none;">
-        <p>Use arrow keys or WASD to control the snake!</p>
     </div>
 </div>
+
 
 <!-- Game Over Modal -->
 <div class="modal fade" id="gameOverModal" tabindex="-1" role="dialog" aria-labelledby="gameOverLabel" aria-hidden="true">
